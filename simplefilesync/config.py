@@ -34,7 +34,7 @@ def init(args):
 
     if 'synced_files' not in config or len(config['remote_hosts']) == 0:
         config['synced_files'] = [
-            'test.txt'
+            '/home/user/test.txt'
         ]
 
     with open(args.config, 'w') as f:
