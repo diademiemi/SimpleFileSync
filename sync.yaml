@@ -1,0 +1,7 @@
+bind_ip: 0.0.0.0
+port: 54321
+remote_hosts:
+- 192.168.50.11
+shared_secret: eBae19F3cd508242cd1CEFBaCCccd9D3
+synced_files:
+- test.txt
