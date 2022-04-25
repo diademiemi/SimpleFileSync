@@ -8,9 +8,14 @@ import pickle
 from struct import unpack, pack
 
 def start():
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.bind((config.config['bind_ip'], config.config['port']))
-    sock.listen(1)
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.bind((config.config['bind_ip'], config.config['port']))
+        sock.listen(1)
+    except Exception as e:
+        print(e)
+        print("Could not start server. Is it already running?")
+        exit(1)
 
     while True:
         (connection, addr) = sock.accept()
@@ -25,14 +30,13 @@ def start():
 
             finally:
                 connection.close()
-            # try:
-            pickle_content = aes.decrypt_message(rec_content[:16], rec_content[16:32], rec_content[32:])
-            file = pickle.loads(pickle_content)
-            print(file)
-            print("Received new {} from {}".format(file['filename'], addr[0]))
-            filesystem.write_file(file['filename'], file['content'])
-            # except Exception as e:
-            #     print(e)
+            try:
+                pickle_content = aes.decrypt_message(rec_content[:16], rec_content[16:32], rec_content[32:])
+                file = pickle.loads(pickle_content)
+                print("Received new {} from {}".format(file['filename'], addr[0]))
+                filesystem.write_file(file['filename'], file['content'])
+            except Exception as e:
+                print(e)
 
 def sendAll(file):
     for host in config.config['remote_hosts']:
@@ -47,7 +51,6 @@ def send(host, file):
         with open(file, 'r') as f:
             
             pickle_content = pickle.dumps({ "filename": file, "content": f.read() })
-            print(pickle_content)
             nonce, tag, ciphertext = aes.encrypt_message(pickle_content)
             length = pack('>Q', len(nonce + tag + ciphertext))
             s.sendall(length)
