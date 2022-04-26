@@ -1,5 +1,5 @@
 # SimpleFileSync
-Simple Python program to sync a file to other hosts over an encrypted connectio in a network on file modification
+Simple Python program to sync a file to other hosts over an encrypted connection in a network on file modification
 
 ## Purpose
 This program syncs one or more (text) files over an encrypted connection. It was made out of the need to synchronize a single configuration file from a cluster of servers. This configuration file could change from any of these servers, but had to stay in sync. We were surprised at the lack of programs that could easily do this without getting into an infinite loop or using a lot of resources.
