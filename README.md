@@ -6,6 +6,7 @@ This program syncs one or more (text) files over an encrypted connection. It was
 
 ## Functionality
 Files are synced upon a modification to them using AES encryption with a shared secret to every host defined in the config file. The statefile can be used to write monitoring checks for this program.  
+A systemd unit file is included in `simplefilesync.service`, it expects the program to be located at `/opt/simplefilesync` and the config at `/opt/simplefilesync/sync.yaml`.  
 
 ## Configuration
 | Variable| Description |
