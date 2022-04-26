@@ -43,7 +43,7 @@ def start():
                 # Print to console
                 print("Received new {} from {}".format(file['filename'], addr[0]))
                 # Write the new file
-                filesystem.write_file(file['filename'], file['content'])
+                filesystem.write_file(file['filename'], file['content'], addr[0])
             except Exception as e:
                 print(e)
 

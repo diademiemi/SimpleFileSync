@@ -45,6 +45,10 @@ def init(args):
             '/home/user/test.txt'
         ]
 
+    # Add default synced files if they don't exist
+    if 'statefile' not in config:
+        config['statefile'] = '/tmp/simplefilesync.state'
+
     # Rewrite config file
     with open(args.config, 'w') as f:
         yaml.dump(config, f)

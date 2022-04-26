@@ -3,8 +3,12 @@ import inotify.adapters
 from simplefilesync import socket, config
 
 import os
+import hashlib
+import time
 
 def startInotify():
+    global files
+    files = {}
     # Make accessible from write_file function
     global watchFor
     # Filter of events to watch for
@@ -15,12 +19,19 @@ def startInotify():
     inotifs = inotify.adapters.Inotify()
 
     # Register watchers
-    for file in config.config['synced_files']:
+    for filename in config.config['synced_files']:
         # Create empty file if it doesn't exist. inotify will error otherwise.
-        if not os.path.exists(file):
-            open(file, 'a').close()
+        if not os.path.exists(filename):
+            open(filename, 'a').close()
         # Add watcher
-        inotifs.add_watch(file, watchFor)
+        inotifs.add_watch(filename, watchFor)
+        # Add file to filesDict
+        with open(filename, 'r') as f:
+            files[filename] = {
+                'md5': hashlib.md5(f.read().encode()).hexdigest(),
+                'lastChanged': os.path.getmtime(filename),
+                'lastChangedBy': '',
+                }
 
     while True:
         events = inotifs.event_gen()
@@ -30,16 +41,31 @@ def startInotify():
                 continue
             # Print to console
             print("Modified file {}".format(event[2]))
+            # Change statefile
+            with open(filename, 'r') as f:
+                files[filename] = {
+                    'md5': hashlib.md5(f.read().encode()).hexdigest(),
+                    'lastChanged': time.time(),
+                    'lastChangedBy': 'self',
+                    }
             # Send file to remote hosts
             socket.sendAll(event[2])
 
-def write_file(filename, content):
+def write_file(filename, content, address):
     try:
         # Temporarily remove watcher so it doesn't fire infinitely
         inotifs.remove_watch(filename)
         # Write file
         with open(filename, 'w') as f:
             f.write(content)
+        # Add files hash
+        with open(filename, 'r') as f:
+            files[filename] = {
+                'md5': hashlib.md5(f.read().encode()).hexdigest(),
+                'lastChanged': time.time(),
+                'lastChangedBy': address,
+                }
+
         # Add watcher back
         inotifs.add_watch(filename, watchFor)
     except Exception as e:
