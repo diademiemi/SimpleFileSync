@@ -1,9 +1,7 @@
 import argparse
 import threading
 
-import simplefilesync.config as config
-import simplefilesync.filesystem as filesystem
-import simplefilesync.socket as socket
+from simplefilesync import config, filesystem, socket
 
 # Definition for the filesystem watcher thread
 class InotifyThread(threading.Thread):

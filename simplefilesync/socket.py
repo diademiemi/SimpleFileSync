@@ -1,9 +1,6 @@
+from simplefilesync import aes, config, filesystem
+
 import socket
-
-import simplefilesync.aes as aes
-import simplefilesync.config as config
-import simplefilesync.filesystem as filesystem
-
 import pickle
 from struct import unpack, pack
 

@@ -1,7 +1,6 @@
 import inotify.adapters
 
-import simplefilesync.config as config
-import simplefilesync.socket as socket
+from simplefilesync import socket, config
 
 import os
 

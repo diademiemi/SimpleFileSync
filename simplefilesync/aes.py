@@ -1,6 +1,6 @@
-from Crypto.Cipher import AES
-
 import simplefilesync.config as config
+
+from Crypto.Cipher import AES
 
 # Encrypt the message with AES
 def encrypt_message(message):
