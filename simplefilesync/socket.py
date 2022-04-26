@@ -7,7 +7,7 @@ from struct import unpack, pack
 def start():
     try:
         # Attempt to create socket and bind it to the IP and port
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, socket.SO_REUSEADDR)
         sock.bind((config.config['bind_ip'], config.config['port']))
         sock.listen(1)
     except Exception as e:
