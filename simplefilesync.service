@@ -1,0 +1,12 @@
+[Unit]
+Description=Simple file sync program
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/simplefilesync/
+ExecStart=python3 /opt/simplefilesync/main.py -c /opt/simplefilesync/sync.yaml
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
