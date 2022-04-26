@@ -5,7 +5,7 @@ Simple Python program to sync a file to other hosts over an encrypted connection
 This program syncs one or more (text) files over an encrypted connection. It was made out of the need to synchronize a single configuration file from a cluster of servers. This configuration file could change from any of these servers, but had to stay in sync. We were surprised at the lack of programs that could easily do this without getting into an infinite loop or using a lot of resources.
 
 ## Functionality
-Files are synced upon a modification to them using AES encryption with a shared secret to every host defined in the config file. 
+Files are synced upon a modification to them using AES encryption with a shared secret to every host defined in the config file. The statefile can be used to write monitoring checks for this program.  
 
 ## Configuration
 | Variable| Description |
@@ -14,8 +14,14 @@ Files are synced upon a modification to them using AES encryption with a shared 
 | `port` | Port to bind to and use for remote connections |
 | `remote_hosts` | Lists of remote hosts to send files to and accept files from |
 | `shared_secret` | 32 byte shared secret for all hosts used for encryption. **Must be the same across all hosts** |
+| `statefile` | JSON file of the states of every file and this program. Can be used for monitoring checks |
 | `synced_files` | Lists of files to sync and send from this host |
 
+### Example statefile
+This is a statefile after the file got changed by 192.168.50.13, the JSON array also includes the has the timestamp and MD5 hash. This file is generated every 5 seconds and includes a timestamp to ensure it is still getting written to.
+```
+{"files": {"/home/vagrant/test.txt": {"md5": "f48d57391affb28d2669de3a357cfe40", "lastChanged": 1650959873.1181378, "lastChangedBy": "192.168.50.13"}}, "time": 1650959986.05356}
+```
 
 <details><summary>See default config file</summary><p>
 
@@ -27,13 +33,14 @@ remote_hosts:
 - 10.10.10.1
 - 10.10.10.2
 shared_secret: 
+statefile: /tmp/simplefilesync.state
 synced_files:
 - /home/user/test.txt
 ```
 </p></details>
 
 ## Example
-The following configuration was used to sync the `/home/vagrant/test.txt` file.
+The following configuration was used to sync the `/home/vagrant/test.txt` file.  
 Goes without saying.. don't use this shared secret....
 
 <details open><summary>Server 1 config</summary><p>
@@ -45,6 +52,7 @@ remote_hosts:
 - 192.168.50.12
 - 192.168.50.13
 shared_secret: eBae19F3cd508242cd1CEFBaCCccd9D3
+statefile: /tmp/simplefilesync.state
 synced_files:
 - /home/vagrant/test.txt
 ```
@@ -59,6 +67,7 @@ remote_hosts:
 - 192.168.50.11
 - 192.168.50.13
 shared_secret: eBae19F3cd508242cd1CEFBaCCccd9D3
+statefile: /tmp/simplefilesync.state
 synced_files:
 - /home/vagrant/test.txt
 ```
@@ -73,6 +82,7 @@ remote_hosts:
 - 192.168.50.11
 - 192.168.50.12
 shared_secret: eBae19F3cd508242cd1CEFBaCCccd9D3
+statefile: /tmp/simplefilesync.state
 synced_files:
 - /home/vagrant/test.txt
 ```
