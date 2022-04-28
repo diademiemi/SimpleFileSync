@@ -129,3 +129,6 @@ Sent new /home/vagrant/test.txt to 192.168.50.11
 Sent new /home/vagrant/test.txt to 192.168.50.12
 ```
 </p></details>
+
+## Ansible
+Check the https://github.com/diademiemi/simplefilesync-ansible-role repository for an Ansible role to automate installing this program on a set of servers.  
