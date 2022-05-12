@@ -5,8 +5,9 @@ After=network.target
 [Service]
 Type=simple
 WorkingDirectory=/opt/simplefilesync/
-ExecStart=python3 /opt/simplefilesync/main.py -c /opt/simplefilesync/sync.yaml
+ExecStart=/usr/bin/python3 -u /opt/simplefilesync/main.py -c /opt/simplefilesync/sync.yaml
 Restart=on-failure
+StandardOutput=journal+console
 
 [Install]
 WantedBy=multi-user.target
