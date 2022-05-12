@@ -55,20 +55,23 @@ def write_file(filename, content, address):
     try:
         # Temporarily remove watcher so it doesn't fire infinitely
         inotifs.remove_watch(filename)
-        # Write file
-        with open(filename, 'w') as f:
-            f.write(content)
-        # Add files hash
-        with open(filename, 'r') as f:
-            files[filename] = {
-                'md5': hashlib.md5(f.read().encode()).hexdigest(),
-                'lastChanged': time.time(),
-                'lastChangedBy': address,
-                }
-
+        try:
+            # Write file
+            with open(filename, 'w') as f:
+                f.write(content)
+            # Add files hash
+            with open(filename, 'r') as f:
+                files[filename] = {
+                    'md5': hashlib.md5(f.read().encode()).hexdigest(),
+                    'lastChanged': time.time(),
+                    'lastChangedBy': address,
+                    }
+        except Exception as e:
+            print("Could not write file")
+            print(e)
         # Add watcher back
         inotifs.add_watch(filename, watchFor)
     except Exception as e:
         print(e)
         # Vim is weird and locks files, moves them to a temp file, and then moves them back, etc.
-        print("Was this file modified with vim? If so this error can be ignored.")
+        print("Was this file modified with vim? If so this error can be ignored.")%                                                                                                                                                            ~/Git/Work/infra    tmp +1 !1 ?1 ······································································································································································································
