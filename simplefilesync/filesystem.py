@@ -40,7 +40,7 @@ def startInotify():
             if event is None:
                 continue
             # Print to console
-            print("Modified file {}".format(event[2]))
+            print("[INFO] Modified file {}".format(event[2]))
             # Change statefile
             with open(filename, 'r') as f:
                 files[filename] = {
@@ -67,11 +67,11 @@ def write_file(filename, content, address):
                     'lastChangedBy': address,
                     }
         except Exception as e:
-            print("Could not write file")
+            print("[ERROR] Could not write file")
             print(e)
         # Add watcher back
         inotifs.add_watch(filename, watchFor)
     except Exception as e:
-        print(e)
         # Vim is weird and locks files, moves them to a temp file, and then moves them back, etc.
-        print("Was this file modified with vim? If so this error can be ignored.")%                                                                                                                                                            ~/Git/Work/infra    tmp +1 !1 ?1 ······································································································································································································
+        print("[WARNING] Was this file modified with vim? If so this error can be ignored.")
+        print(e)

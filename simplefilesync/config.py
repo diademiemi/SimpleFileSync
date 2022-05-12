@@ -11,7 +11,7 @@ def init(args):
     # Create config file if it doesn't exist
     if not os.path.exists(args.config):
         open(args.config, 'a').close()
-        print("Creating default config file at {}".format(args.config) + "\nPlease edit this file to configure this program")
+        print("[INFO] Creating default config file at {}".format(args.config) + "\nPlease edit this file to configure this program")
 
     # Load config file
     with open(args.config, 'r') as f:
@@ -22,7 +22,7 @@ def init(args):
         chars =  string.hexdigits
         key = ''.join(random.choice(chars) for _ in range(32))
         config = {'shared_secret': key}
-        print("Generated new 32 character secret in config file")
+        print("[INFO] Generated new 32 character secret in config file")
 
     # Add default hosts if they don't exist
     if 'remote_hosts' not in config or len(config['remote_hosts']) == 0:

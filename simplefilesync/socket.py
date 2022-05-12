@@ -14,7 +14,7 @@ def start():
     except Exception as e:
         # if port is in use, exit
         print(e)
-        print("Could not start server. Is it already running?")
+        print("[ERROR] Could not start server. Is it already running?")
         exit(1)
 
     # Start indefinite loop
@@ -42,10 +42,11 @@ def start():
                 # Load the Python dict from the binary data
                 file = pickle.loads(pickle_content)
                 # Print to console
-                print("Received new {} from {}".format(file['filename'], addr[0]))
+                print("[INFO] Received new {} from {}".format(file['filename'], addr[0]))
                 # Write the new file
                 filesystem.write_file(file['filename'], file['content'], addr[0])
             except Exception as e:
+                print("[ERROR] Could not receive file")
                 print(e)
 
 def sendAll(file):
@@ -71,8 +72,9 @@ def send(host, file):
             s.sendall(length)
             # Send the message
             s.sendall(nonce + tag + ciphertext)
-            print("Sent new {} to {}".format(file, host))
+            print("[INFO] Sent new {} to {}".format(file, host))
         # Close the socket
         s.close()
     except Exception as e:
+        print("[ERROR] Could not send file to {} on port {} (TCP)".format(host, config.config['port']))
         print(e)
